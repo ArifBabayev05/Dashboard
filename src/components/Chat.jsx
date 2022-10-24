@@ -23,7 +23,7 @@ const Chat = () => {
 
         <Button
           icon={<MdOutlineCancel />}
-          color="rgb(153, 171, 180)"
+          color="#b86e1f"
           bgHoverColor="light-gray"
           size="2xl"
           borderRadius="50%"
