@@ -1,6 +1,7 @@
 export { default as Ecommerce } from "./Ecommerce";
 export { default as Employees } from "./Employees";
 export { default as EmployeesAdd } from "./EmployeesAdd";
+export { default as EmployeeDetail } from "./EmployeeDetail";
 export { default as Area } from "./Charts/Area";
 export { default as Bar } from "./Charts/Bar";
 export { default as ColorMapping } from "./Charts/ColorMapping";

@@ -7,7 +7,9 @@ import { Navbar, Sidebar, ThemeSettings } from "./components";
 import {
   Ecommerce,
   Employees,
-  EmployeesAdd
+  EmployeesAdd,
+  EmployeeDetail
+  
 } from "./pages";
 
 
@@ -54,6 +56,7 @@ const App = () => {
                 <Route path="/ecommerce" element={<Ecommerce />} />             
                 <Route path="/employees" element={<Employees />} />
                 <Route path="/employees/add" element={<EmployeesAdd />} />
+                <Route path="/employeedetail/:id" element={<EmployeeDetail />} />
 
              
               </Routes>

@@ -4,11 +4,15 @@ import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/Table.css'
+import { SiGmail } from 'react-icons/si';
+import { FaPhoneAlt } from 'react-icons/fa'
 
 const Employees = (props) => {
 
   const [query, setQuery] = useState("")
   const [data, setData] = useState([])
+  const [dataLength, setDataLength] = useState()
+
   useEffect(() => {
     axios.get('http://localhost:1003/products')
 
@@ -17,19 +21,29 @@ const Employees = (props) => {
       }).catch(err => console.log(err))
   }, [])
 
+  useEffect(() => {
+    axios.get('http://localhost:1003/products')
 
-  const Delete = (id, e) => {
-    const url = `http://localhost:53410/api/Company/delete?id=${id}`
-
-    e.preventDefault();
-
-    axios.post(url)
       .then(res => {
-        toast.success("Uğurla silindi")
+        setDataLength(res.data.length)
+      }).catch(err => console.log(err))
+  }, [])
+
+  const Delete = (_id, e) => {
+    const url = `http://localhost:1003/products/${_id}`
+
+    axios.delete(url)
+      .then(res => {
+        toast.success("Deleted")
 
       }).catch(err => toast.error(err))
   }
+  function Update(_id) {
 
+    props.history.push("/company" + _id)
+    // navigate("/companyupdate")
+
+  }
   const array = data.filter((value) => {
     if (query === "") {
       return value;
@@ -43,23 +57,24 @@ const Employees = (props) => {
       <tbody>
         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
           <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            Apple MacBook Pro 17"
+            {data.name}
           </th>
           <td class="py-4 px-6">
-            Sliver
-          </td>
-          <td class="py-4 px-6">
-            <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
-              Light
-            </button>
+            <p className='flex '><span className='mx-2'><SiGmail /></span> {data.mail}</p>
+            <p className='flex'><span className='mx-2'><FaPhoneAlt /></span>{data.tel}</p>
 
           </td>
           <td class="py-4 px-6">
-            $2999
+            <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+              {data.leadSource}
+            </button>
+
           </td>
+
           <td class="py-4 px-6 text-right">
-            <a href="#" class="font-medium text-blue-600 mx-4 dark:text-blue-500 hover:underline">Details</a>
-            <button href="#" onClick={(e) => Delete(data.id, e)} class="font-medium text-red-600 dark:text-red-500 hover:underline">Delete</button>
+            <a class="font-medium text-blue-600 dark:text-red-500 hover:underline"> <Link to={`/employeedetail/${data._id}`} onClick={() => Update(data._id)} className='btn mx-4 btn-info update'>Details</Link></a>
+
+            <button href="#" onClick={(e) => Delete(data._id, e)} class="font-medium text-red-600 dark:text-red-500 hover:underline">Delete</button>
 
           </td>
         </tr>
@@ -81,7 +96,7 @@ const Employees = (props) => {
                 <div className='row'>
                   <div className='col-md-9 col-sm-6 col-lg-12 d-flex mb-3 justify-content-between'>
                     <div className='flex justify-between'>
-                      <h3 className='text-4xl mb-4'>567 Leads</h3>
+                      <h3 className='text-4xl mb-4'>{dataLength} Leads</h3>
                       <div className='d-flex mb-4 mt-2'>
                         <a type="button" href='/employees/add' class="text-white bg-[#FF9119] hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
                           Create Leads
@@ -118,9 +133,7 @@ const Employees = (props) => {
                           <th scope="col" class="py-3 px-6">
                             Lead Source
                           </th>
-                          <th scope="col" class="py-3 px-6">
-                            Lead Owner
-                          </th>
+
                           <th scope="col" class="py-3 px-6">
                             <span class="sr-only">Edit</span>
                           </th>
