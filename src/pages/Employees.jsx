@@ -1,117 +1,174 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import Card from './EmployeesCard'
+import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
-function Employees() {
-  const url = `http://localhost:53410/api/Vacancies/getall`
+const Employees = (props) => {
+
   const [query, setQuery] = useState("")
+  const [data, setData] = useState([])
+  useEffect(() => {
+    axios.get('https://jsonplaceholder.typicode.com/users')
 
+      .then(res => {
+        setData(res.data)
+      }).catch(err => console.log(err))
+  }, [])
 
-  const [products, setProducts] = useState({
-    loading: false,
-    data: null,
-    error: false
+  function Update(id) {
+
+    props.history.push("/company" + id)
+    // navigate("/companyupdate")
+
+  }
+  const Delete = (id, e) => {
+    const url = `http://localhost:53410/api/Company/delete?id=${id}`
+
+    e.preventDefault();
+
+    axios.post(url)
+      .then(res => {
+        toast.success("Uğurla silindi")
+
+      }).catch(err => toast.error(err))
+  }
+
+  const array = data.filter((value) => {
+    if (query === "") {
+      return value;
+    }
+    else if (value.name.toLowerCase().includes(query.toLowerCase())) {
+      return value;
+    }
+    else if (value.telNumber.toLowerCase().includes(query.toLowerCase())) {
+      return value;
+    }
+    else if (value.mail.toLowerCase().includes(query.toLowerCase())) {
+      return value;
+    }
+
+  }).map((data, index) => {
+    return (
+      <tbody>
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+          <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            Apple MacBook Pro 17"
+          </th>
+          <td class="py-4 px-6">
+            Sliver
+          </td>
+          <td class="py-4 px-6">
+            Laptop
+          </td>
+          <td class="py-4 px-6">
+            $2999
+          </td>
+          <td class="py-4 px-6 text-right">
+            <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+          </td>
+        </tr>
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+          <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            Microsoft Surface Pro
+          </th>
+          <td class="py-4 px-6">
+            White
+          </td>
+          <td class="py-4 px-6">
+            Laptop PC
+          </td>
+          <td class="py-4 px-6">
+            $1999
+          </td>
+          <td class="py-4 px-6 text-right">
+            <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+          </td>
+        </tr>
+        <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+          <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            Magic Mouse 2
+          </th>
+          <td class="py-4 px-6">
+            Black
+          </td>
+          <td class="py-4 px-6">
+            Accessories
+          </td>
+          <td class="py-4 px-6">
+            $99
+          </td>
+          <td class="py-4 px-6 text-right">
+            <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+          </td>
+        </tr>
+
+      </tbody>
+    )
   })
 
 
-
-  useEffect(() => {
-    setProducts({
-      loading: true,
-      data: null,
-      error: false
-
-    })
-
-    axios.get(url)
-      .then(response => {
-        setProducts({
-          loading: false,
-          data: response.data,
-          error: false
-        })
-
-          .catch(() => {
-            setProducts({
-              loading: false,
-              data: null,
-              error: true
-            })
-          })
-      })
-  }, [url])
-
-  let content = null
-  
-
-
-  // if (products.loading) {
-  //   content = <Loader />
-  // }
-
-  if (products.error) {
-    content = <p>Xəta baş verdi, yenidən yoxlayın.</p>
-  }
-
-  if (products.data) {
-    content =
-      products.data.map((product) =>
-        <div key={product.id}>
-          <Card product={product} />
-        </div>
-      )
-
-  }
-
-
-  if (products.data) {
-    
-    content =
-      products.data.filter(product => {
-        if (query === "") {
-
-          return product;
-
-        } else if (product.name.toLowerCase().includes(query.toLowerCase())) {
-
-          return product;
-        }
-        else if (product.company.name.toLowerCase().includes(query.toLowerCase())) {
-
-          return product;
-        }
-        
-        return "";
-      }).map((product) =>
-        <div key={product.id}>
-          <Card product={product} />
-        </div>
-      ).reverse();
-  }
-
   return (
-    <div className='m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl dark:bg-secondary-dark-bg'>
-      <div className='d-flex container '>
-        <h1 className='text container ' style={{ color: 'var(--pink)', fontWeight: 'normal', fontSize: '35px', alignItems: 'center', display: 'flex' }}>Vakansiyalar</h1>
-        <form className='searchJob mb-5' style={{ alignItems: 'center', display: 'flex', top: '20px' }}>
-          <input className='searchBar mt-2 p-2' onChange={event => setQuery(event.target.value)} type='text'></input>
-          <button className='search__submit' type='submit'>
-            
-          </button>
-          {/* <button onClick={()=>sorting("salary")}>Maaşa görə sırala</button> */}
-        </form>
+    <div>
+      <div className='m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl dark:bg-secondary-dark-bg'>
+
+        <div>
+          <div className="container-fluid">
+            <div className="row flex-nowrap">
+
+              <div className="col py-3">
+                <div className='row'>
+                  <div className='col-md-9 col-sm-6 col-lg-12 d-flex mb-3 justify-content-between'>
+                    <h3>Şirkətlər</h3>
+                    <form class="search-box newSearchInputForm" style={{ 'margin-right': "60px" }}>
+                      <input onChange={(event) => setQuery(event.target.value)} type="text" placeholder="Axtarış hissəsi" />
+                      <button type="reset"></button>
+                    </form>
+                  </div>
+
+                  <div className='d-flex mb-4 mt-2'>
+                    <a href='admin/companyadd' className='btn btn-success position-relative'>Şirkət Əlavə Et</a>
+                  </div>
+                </div>
+                <div style={{ 'overflow-x': 'auto' }}>
+
+                  <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                          <th scope="col" class="py-3 px-6">
+                            Product name
+                          </th>
+                          <th scope="col" class="py-3 px-6">
+                            Color
+                          </th>
+                          <th scope="col" class="py-3 px-6">
+                            Category
+                          </th>
+                          <th scope="col" class="py-3 px-6">
+                            Price
+                          </th>
+                          <th scope="col" class="py-3 px-6">
+                            <span class="sr-only">Edit</span>
+                          </th>
+                        </tr>
+                      </thead>
+
+                      {array}
+
+
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
-
-      {content}
-
     </div>
   )
 }
 
 export default Employees
-
-
-
-
-
