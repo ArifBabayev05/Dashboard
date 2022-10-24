@@ -1,7 +1,8 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
 
-import { SiShopware } from "react-icons/si";
+import { SiAnalogue } from "react-icons/si";
+
 import { MdOutlineCancel } from "react-icons/md";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 
@@ -34,8 +35,8 @@ const Sidebar = () => {
               onClick={handleCloseSideBar}
               className="items-center gap-3 ml-3 flex mt-4 text-xl font-extrabold tracking-tighter dark:text-white text-slate-900"
             >
-              <SiShopware />
-              <span>Shoppy</span>
+              <SiAnalogue />
+              <span>GolfPipe</span>
             </Link>
             <TooltipComponent content="Menu" position="BottomCenter">
               <button
