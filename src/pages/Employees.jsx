@@ -10,7 +10,7 @@ const Employees = (props) => {
   const [query, setQuery] = useState("")
   const [data, setData] = useState([])
   useEffect(() => {
-    axios.get('https://jsonplaceholder.typicode.com/users')
+    axios.get('http://localhost:1003/products')
 
       .then(res => {
         setData(res.data)
@@ -83,9 +83,9 @@ const Employees = (props) => {
                     <div className='flex justify-between'>
                       <h3 className='text-4xl mb-4'>567 Leads</h3>
                       <div className='d-flex mb-4 mt-2'>
-                        <button type="button" class="text-white bg-[#FF9119] hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
+                        <a type="button" href='/employees/add' class="text-white bg-[#FF9119] hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
                           Create Leads
-                        </button>
+                        </a>
                       </div>
                     </div>
                     <form class="flex items-center">

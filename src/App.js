@@ -6,8 +6,10 @@ import "./App.css";
 import { Navbar, Sidebar, ThemeSettings } from "./components";
 import {
   Ecommerce,
-  Employees
+  Employees,
+  EmployeesAdd
 } from "./pages";
+
 
 import { useStateContext } from "./contexts/ContextProvider";
 
@@ -51,6 +53,8 @@ const App = () => {
                 <Route path="/" element={<Ecommerce />} />
                 <Route path="/ecommerce" element={<Ecommerce />} />             
                 <Route path="/employees" element={<Employees />} />
+                <Route path="/employees/add" element={<EmployeesAdd />} />
+
              
               </Routes>
             </div>
